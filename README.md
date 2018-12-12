@@ -2,14 +2,12 @@ EBO Image Tool
 -------------------
 
 About:
-	ImageTool.exe is a command-line utility that takes an EBO image 
-	file, and a desired option, and returns either a result to the 
-	command window, Wireshark (.pcapng) converted version of 
-	the image file to the current working directory, or the tool will
-	send all NPDUs contained within the specified EBO Image File to a
-	targeted MPX.
-
-	Source code is included in ImageTool.cs
+ImageTool.exe is a command-line utility that takes an EBO image 
+file, and a desired option, and returns either a result to the 
+command window, Wireshark (.pcapng) converted version of 
+the image file to the current working directory, or the tool will
+send all NPDUs contained within the specified EBO Image File to a
+targeted MPX.
 
 Command-line Syntax:
 
@@ -39,7 +37,7 @@ Command-line Arguments:
 	
 	[mpxip]: used with [ /r ]; IPv4 address of targeted MPX device
 
-Command-line Options:                	Output:
+Command-line Options & Output:
 
     	/? - Help                       Char_String
 
