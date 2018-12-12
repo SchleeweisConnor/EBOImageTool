@@ -9,8 +9,6 @@ About:
 	send all NPDUs contained within the specified EBO Image File to a
 	targeted MPX.
 
-	Source code is included in ImageTool.cs
-
 Command-line Syntax:
 
 	Wireshark Conversion:
