@@ -50,22 +50,12 @@ Command-line Options:                	Output:
      	/t - Type                       Boolean
 
      	/w - Reformat to Wireshark      (.pcapng) file
-             **Note: Reformats the EBO image file provided in [file_location]
-                     to a Wireshark readable '.pcapng' file. The resulting
-                     file will be placed in the current working directory,
-		     and will overwrite previous conversions.
+             	**Note: Reformats the EBO image file provided in [file_location]
+                     	to a Wireshark readable '.pcapng' file. The resulting
+                     	file will be placed in the current working directory,
+		     	and will overwrite previous conversions.
 	
 	/r - Replay Instructions	APDUs -> MPX
-	     **Note: Sends all instructions contained within [file_location]
-		     to the BACnet listening port located at the IPv4 address
-		     specified in [mpxip].
-     	/w - Reformat to Wireshark      (.pcapng) file
-             **Note: Reformats the EBO image file provided in [file_location]
-                     to a Wireshark readable '.pcapng' file. The resulting
-                     file will be placed in the current working directory,
-		     and will overwrite previous conversions.
-	
-	/r - Replay Instructions	APDUs -> MPX
-	     **Note: Sends all instructions contained within [file_location]
-		     to the BACnet listening port located at the IPv4 address
-		     specified in [mpxip].
+		**Note: Sends all instructions contained within [file_location]
+		     	to the BACnet listening port located at the IPv4 address
+		     	specified in [mpxip].
