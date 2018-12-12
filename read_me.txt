@@ -28,18 +28,18 @@ Command-line Syntax:
 	  >ImageTool /?
 
 Command-line Arguments:
-
+	
 	[option]: listed below, decides the operation taken
-
+	
 	[file_location]: path to EBO image file, may be either absolute, 
 			 or relative to the current working directory
-		
+	
 	[new_file_name]: optionally used with [ /w ]; a name provided here will
 			 replace the default conversion file name: "IFConversion"
-		
+	
 	[mpxip]: used with [ /r ]; IPv4 address of connected MPX device that is to
 		 be sent the instructions contained within the EBO image file
-     
+
 Command-line Options:                	Output:
 
     	/? - Help                       Char_String

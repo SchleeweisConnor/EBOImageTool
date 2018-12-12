@@ -12,23 +12,30 @@
     namespace EBOImageTool
     {
         /* 
-         * Command-line syntax:
-         *      >ImageTool /[option] [file_location]* [ip]**
-         *      	- Note: (*) denotes dependent console parameters,
-							(**) is dependent on both
+         * Command-line Syntax:
+         * 
+         *      >ImageTool /[option] [file_location] [new_name] [mpxip]
 		 *
-         * Command-line options:                Output:
+         * Command-line Options:                Output:
+         * 
          *      /? - Help                       Char_String
+         *      
          *      /f - Min_FB_Version             Char_String
+         *      
          *      /h - Header (entire)            Char_String
+         *      
          *      /n - Model_Name                 Char_String
+         *      
          *      /s - Min_Script_Version         Char_String
+         *      
          *      /t - Type                       Boolean
-         *      /w - Reformat to Wireshark*     ConversionFile.pcapng
+         *      
+         *      /w - Reformat to Wireshark      ConversionFile.pcapng
          *           - Note: The above option will place the resulting 
          *                   file where the command was executed, and 
          *                   will overwrite any previous conversion.
-		 *		/r - Replay Instructions**		NPDUs -> MPX
+         *                   
+		 *		/r - Replay Instructions		APDUs -> MPX
          */
         class ImageTool
         {
@@ -39,39 +46,39 @@
              * input:
              * string[] Args: Command-line arguments. At least Args[0] required
              *                Args[0]: Option
-             *                Args[1]: EBO Image File location
+             *                Args[1]: EBO image file location
              *                Args[2]: MPX IP address
              */
             private static void Main(string[] Args)
             {
-                string ErrorMessage = "Parameter Syntax:\r\n" +
-                                      "  >ImageTool /[option] [file_location] [mpxip]\r\n" +
-                                      "     **[file_location] is relative to\r\n" +
-                                      "       the current working directory.\r\n" +
-                                      "For help:\r\n" +
-                                      "  >ImageTool /?";
+                string ErrorMessage = "Parameter Syntax:\r\n\r\n" +
+                                      "  >ImageTool /[option] [file_location] [new_name] [mpxip]\r\n\r\n" +
+                                      "For Help:\r\n\r\n" +
+                                      "  >ImageTool /?\r\n";
 
-                string HelpMessage = "Syntax:\r\n" +
-                                     "   >ImageTool /[option] [file_location]* [mpxip]**\r\n" +
-									 "      Notes:\r\n" +
-                                     "       - [file_location] is relative to the\r\n" +
-                                     "         current working directory.\r\n" +
-									 "       - (*) denotes dependent console parameters in\r\n" +
-									 "         Options, (**) is dependent on both.\r\n\r\n" +
-                                     "Options:\r\n" +
-                                     "   /? - Displays help\r\n" +
-                                     "  */f - Displays the Min_FB_Version\r\n" +
-                                     "  */h - Displays the entire Header\r\n" +
-                                     "  */n - Displays the Model_Name\r\n" +
-                                     "  */s - Displays the Min_Script_Version\r\n" +
-                                     "  */t - Displays the Type\r\n" +
-                                     "  */w - Reformats the EBO image file provided in [file_location]\r\n" +
-                                     "        to a Wireshark readable '.pcapng' file. The resulting file\r\n" +
-                                     "        will be placed in the current working directory, and will\r\n" +
-                                     "        overwrite previous conversions.\r\n" +
-									 " **/r - Sends all instructions contained within\r\n" +
-                                     "        [file_location] to the BACnet listening port\r\n" +
-                                     "    	   located at the IPv4 address in [mpxip].";
+                string HelpMessage = "Syntax:\r\n\r\n" +
+                                     "   >ImageTool /[option] [file_location] [new_name] [mpxip]\r\n\r\n" +
+                                     "Arguments:\r\n\r\n" +
+                                     "   [option] - Listed below; Decides the operation taken\r\n\r\n" +
+                                     "   [file_location] - Path to EBO image file\r\n\r\n" +
+                                     "   [new_name] - Optionally used with [/w]; Provides a custom name\r\n" +
+                                     "                for the conversion file\r\n\r\n" +
+                                     "   [mpxip] - Used with [/r]; IPv4 address of targeted MPX device\r\n\r\n" +
+                                     "Options:\r\n\r\n" +
+                                     "   /? - Displays help\r\n\r\n" +
+                                     "   /f - Displays the Min_FB_Version\r\n\r\n" +
+                                     "   /h - Displays the entire Header\r\n\r\n" +
+                                     "   /n - Displays the Model_Name\r\n\r\n" +
+                                     "   /s - Displays the Min_Script_Version\r\n\r\n" +
+                                     "   /t - Displays the Type\r\n\r\n" +
+                                     "   /w - Reformats the EBO image file provided in [file_location] to a\r\n" +
+                                     "        Wireshark readable '.pcapng' file. The resulting file will be\r\n" +
+                                     "        placed in the current working directory, overwrites conversions\r\n" +
+                                     "        of the same name, and can be provided with a custom name\r\n" +
+                                     "        with the optional [new_name] argument.\r\n\r\n" +
+                                     "   /r - Sends all instructions contained within [file_location]\r\n" +
+                                     "        to the BACnet listening port located at the IPv4\r\n" +
+                                     "        address specified in [mpxip].\r\n";
 
                 if (Args.Length == 0 || Args.Length > 3)
                 {
@@ -134,7 +141,7 @@
                                     break;
                                 case "/w":
                                     Console.WriteLine("Extracting...");
-                                    Query = Convert(Args[1]);
+                                    Query = Convert(Path.GetFullPath(Args[1]), (Path.GetFileNameWithoutExtension(Args[1]) + "_Conversion.pcapng"));
                                     break;
                                 default:
                                     Query = String.Format("ERROR - Unrecognized option: {0}\r\n\r\n" + ErrorMessage, Option);
@@ -149,27 +156,33 @@
                     {
                         Query = "ERROR - Null argument\r\n" + ErrorMessage;
                     }
-					else if (Option == "/?")
-					{
-						Query = HelpMessage;
-					}
-					else if (Option == "/r")
-					{
-						FileInfo FInfo = new FileInfo(Args[1]);
-                        if (!FInfo.Exists)
-                        {
-                            Query = String.Format("ERROR - The file provided does not exist: {0}\r\n\r\n", Args[1]);
-                        }
-                        else if (!ValidateIPv4(Args[2]))
-                        {
-                            Query = String.Format("ERROR - Invalid IP address: {0}\r\n", Args[2].ToString());
-                        }
-                        Query = Replay(Args[1], Args[2]);
-					}
-					else
-					{
-						Query = String.Format("ERROR - Too many arguments provided for {0}\r\n\r\n" + ErrorMessage, Option);
-					}
+
+                    switch (Option)
+                    {
+                        case "/?":
+                            Query = HelpMessage;
+                            break;
+                        case "/w":
+                            Console.WriteLine("Extracting...");
+                            Query = Convert(Path.GetFullPath(Args[1]), Args[2]);
+                            break;
+                        case "/r":
+                            FileInfo FInfo = new FileInfo(Args[1]);
+                            if (!FInfo.Exists)
+                            {
+                                Query = String.Format("ERROR - The file provided does not exist: {0}\r\n\r\n", Args[1]);
+                            }
+                            else if (!ValidateIPv4(Args[2]))
+                            {
+                                Query = String.Format("ERROR - Invalid IP address: {0}\r\n", Args[2].ToString());
+                            }
+                            Query = Replay(Args[1], Args[2]);
+                            break;
+                        default:
+                            Query = String.Format("ERROR - Too many arguments provided for {0}\r\n\r\n" + ErrorMessage, Option);
+                            break;
+
+                    }
 				}
                 Console.WriteLine(Query);
             }
@@ -245,17 +258,18 @@
             }
 
             /*
-             * Reformats the NPDU instructions from the EBO image file provided to 
-             * .pcapng readable format.
+             * Reformats the APDU instructions from the EBO image file provided to 
+             * Wireshark readable format (.pcapng). 
              * 
              * input:
              * string ImageFile: Image file location relative to current working
              *                   directory
+             * string ConvName: Optional; Provides a custom name for the conversion file
              *                   
              * returns:
              * string "Finished": Message string for console output in Main()
              */
-            private static string Convert(string ImageFile)
+            private static string Convert(string ImageFile, string ConvName)
             {
                 byte[] FileBuffer;
                 try
@@ -268,8 +282,10 @@
                     return Ex.ToString();
                 }
 
+                if (!Path.HasExtension(ConvName)) ConvName += ".pcapng";
+                
                 FileStream FS;
-                string ConFile = Path.Combine(Directory.GetCurrentDirectory(), "IFConversion.pcapng").ToString();
+                string ConFile = Path.Combine(Directory.GetCurrentDirectory(), ConvName);
                 try
                 {
                     if (File.Exists(ConFile))
