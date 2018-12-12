@@ -13,32 +13,29 @@ About:
 
 Command-line Syntax:
 
-	Note: ( *[...] ) indicates optional argument
-
 	Wireshark Conversion:
-	  >ImageTool /w [file_location] *[new_file_name]
+	  >ImageTool /w [file_location] [new_name]
 
 	Replay:
 	  >ImageTool /r [file_location] [mpxip]
 
-	Header Tags:
-	  >ImageTool /[option] [file_location]
+	Display Header/Header Tags:
+	  >ImageTool /[f/h/n/s/t] [file_location]
 
-	Help:
+	Display Help:
 	  >ImageTool /?
 
 Command-line Arguments:
 	
-	[option]: listed below, decides the operation taken
+	[option]: Listed below; Decides the operation taken
 	
-	[file_location]: path to EBO image file, may be either absolute, 
+	[file_location]: Path to EBO image file, may be either absolute, 
 			 or relative to the current working directory
 	
-	[new_file_name]: optionally used with [ /w ]; a name provided here will
-			 replace the default conversion file name: "IFConversion"
+	[new_name]: Optionally used with [ /w ]; Provides a custom name
+		    for the conversion file
 	
-	[mpxip]: used with [ /r ]; IPv4 address of connected MPX device that is to
-		 be sent the instructions contained within the EBO image file
+	[mpxip]: Used with [ /r ]; IPv4 address of targeted MPX device
 
 Command-line Options:                	Output:
 
@@ -61,6 +58,6 @@ Command-line Options:                	Output:
 		     and will overwrite previous conversions.
 	
 	/r - Replay Instructions	APDUs -> MPX
-	     **Note: Sends all instructions contained within
-		     [file_location] to the BACnet listening port
-		     located at the IPv4 address in [mpxip].
+	     **Note: Sends all instructions contained within [file_location]
+		     to the BACnet listening port located at the IPv4 address
+		     specified in [mpxip].
